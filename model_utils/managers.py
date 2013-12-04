@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.fields.related import OneToOneField
 from django.db.models.query import QuerySet
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.gis.db.models.manager import GeoManager, GeoQuerySet
 
 try:
     from django.db.models.constants import LOOKUP_SEP
@@ -13,7 +14,7 @@ except ImportError: # Django < 1.5
     string_types = (basestring,)
 
 
-class InheritanceQuerySet(QuerySet):
+class InheritanceQuerySet(GeoQuerySet):
     def select_subclasses(self, *subclasses):
         levels = self._get_maximum_depth()
         calculated_subclasses = self._get_subclasses_recurse(
@@ -202,7 +203,7 @@ class QueryManager(models.Manager):
         return qs
 
 
-class PassThroughManager(models.Manager):
+class PassThroughManager(GeoManager):
     """
     Inherit from this Manager to enable you to call any methods from your
     custom QuerySet class from your manager. Simply define your QuerySet
